@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word &amp; Character Counter - DevToolKit</title>
+  <meta name="description" content="Free online word counter. Count words, characters, sentences, paragraphs, and estimate reading time. No signup required.">
+  <meta name="keywords" content="word counter, character counter, sentence counter, reading time, text analysis, free online tool">
+  <link rel="canonical" href="https://drlor.github.io/freetools-online/tools/word-counter.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a href="../" class="logo"><span>&gt;_</span> DevToolKit</a>
+      <nav class="header-nav"><a href="../#tools">All Tools</a></nav>
+    </div>
+  </header>
+  <main>
+    <div class="tool-page-header">
+      <div class="breadcrumb"><a href="../">Home</a> / Word &amp; Character Counter</div>
+      <h1>Word &amp; Character Counter</h1>
+      <p>Paste or type your text below to get instant statistics.</p>
+    </div>
+    <div class="tool-container">
+      <textarea id="textInput" placeholder="Start typing or paste your text here..." autofocus></textarea>
+      <div class="stats-bar">
+        <div class="stat"><span class="label">Words</span><span class="value" id="wordCount">0</span></div>
+        <div class="stat"><span class="label">Characters</span><span class="value" id="charCount">0</span></div>
+        <div class="stat"><span class="label">No Spaces</span><span class="value" id="charNoSpace">0</span></div>
+        <div class="stat"><span class="label">Sentences</span><span class="value" id="sentenceCount">0</span></div>
+        <div class="stat"><span class="label">Paragraphs</span><span class="value" id="paraCount">0</span></div>
+        <div class="stat"><span class="label">Read Time</span><span class="value" id="readTime">0s</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="copyText()">Copy Text</button>
+        <button class="btn" onclick="clearText()">Clear</button>
+        <button class="btn" onclick="toUpper()">UPPERCASE</button>
+        <button class="btn" onclick="toLower()">lowercase</button>
+      </div>
+    </div>
+  </main>
+  <div class="toast" id="toast"></div>
+  <footer class="site-footer"><p>DevToolKit - Free tools, zero tracking.</p></footer>
+  <script>
+    const input = document.getElementById("textInput");
+    function updateStats() {
+      const text = input.value;
+      const trimmed = text.trim();
+      const words = trimmed === "" ? 0 : trimmed.split(/\s+/).length;
+      const chars = text.length;
+      const charsNoSpace = text.replace(/\s/g, "").length;
+      const sentences = trimmed === "" ? 0 : trimmed.split(/[.!?]+\s*/g).filter(s => s.length > 0).length;
+      const paragraphs = trimmed === "" ? 0 : trimmed.split(/
+\s*
+/).filter(p => p.trim().length > 0).length;
+      const minutes = Math.floor(words / 200);
+      const seconds = Math.round((words % 200) / 200 * 60);
+      const readTime = minutes > 0 ? minutes + "m " + seconds + "s" : seconds + "s";
+      document.getElementById("wordCount").textContent = words;
+      document.getElementById("charCount").textContent = chars;
+      document.getElementById("charNoSpace").textContent = charsNoSpace;
+      document.getElementById("sentenceCount").textContent = sentences;
+      document.getElementById("paraCount").textContent = paragraphs;
+      document.getElementById("readTime").textContent = readTime;
+    }
+    input.addEventListener("input", updateStats);
+    function copyText() { navigator.clipboard.writeText(input.value); showToast("Copied!"); }
+    function clearText() { input.value = ""; updateStats(); }
+    function toUpper() { input.value = input.value.toUpperCase(); updateStats(); }
+    function toLower() { input.value = input.value.toLowerCase(); updateStats(); }
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2000);
+    }
+  </script>
+</body>
+</html>

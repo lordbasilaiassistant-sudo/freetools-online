@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://drlor.github.io/freetools-online/sitemap.xml
